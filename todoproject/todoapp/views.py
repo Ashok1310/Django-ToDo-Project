@@ -1,4 +1,6 @@
 from django.shortcuts import redirect, render,get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.models import User
 from .models import Todo
 
 def index(request):
@@ -12,6 +14,7 @@ def create_task(request):
         created_by =  request.user,
         task = task
     )
+    messages.success(request,"task has been created...")
     todo.save()
     return redirect("/")
 
