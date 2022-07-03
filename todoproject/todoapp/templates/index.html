@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}
+Your Todo List
+{% endblock title %}
+
+{% block body %}
+
+
+<div class="container my-4">
+    <div class="card" >
+        <div class="card-body">
+            <h5 class="card-title">Create new task</h5>
+            <form action ="{% url 'todo:create' %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">create your new task and manage your day.</label>
+                <input type="text" name="task" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+               </div>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="container my-4">
+ <div class="card" >
+  <div class="card-body">
+    <h5 class="card-title">Todo List</h5>
+   
+    <p class="card-text">
+    {% if todos %}
+    <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">#</th>
+            <th scope="col">Created By</th>
+            <th scope="col">Task</th>
+            <th scope="col">Task creation date</th>
+            <th scope="col">Task updation date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        {% for todo  in todos  %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{todo.created_by}}</td>
+                <td>{{todo.task}}</td>
+                <td>{{todo.created_at}}</td>
+                <td>{{todo.updated_at}}</td>
+                <td>
+                    {% if todo.is_completed %}
+                 <h6><span class="badge bg-success">Completed</span></h6>
+                    {% else %}
+                       <h6><span class="badge bg-primary">Panding</span></h6>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if todo.is_completed %}
+                    <a class="btn btn-danger btn-sm" href="{% url 'todo:update' todo.id %}" role="button">Undo</a>
+                    {% else %}
+                      <a class="btn btn-primary btn-sm" href="{% url 'todo:update' todo.id %}" role="button">Done</a>
+                      <a class="btn btn-danger btn-sm" href="{% url 'todo:delete' todo.id %}" role="button">Delete</a>
+                    {% endif %}
+                </td>
+            <tr>
+        {% endfor %}
+
+        </tbody>
+        </table>
+    {% else %}
+        <h2>No todos found</h2>
+    {% endif %}
+    
+    </p>
+  </div>
+</div>
+</div>
+
+
+{% endblock body %}
